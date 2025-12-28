@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      MYSQL_DATABASE: todo_db
+      MYSQL_USER: todo_user
+      MYSQL_PASSWORD: todo_pass
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - todo-net
+
+  backend:
+    build: ./backend/todo-backend
+    container_name: backend
+    depends_on:
+      - mysql
+    networks:
+      - todo-net
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "80:5173"
+    depends_on:
+      - backend
+    networks:
+      - todo-net
+
+volumes:
+  mysql_data:
+
+networks:
+  todo-net:
