@@ -19,6 +19,7 @@ services:
     container_name: backend
     depends_on:
       - mysql
+    restart: always
     networks:
       - todo-net
 
